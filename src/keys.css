@@ -1,0 +1,258 @@
+/* Kelvo keys. Every key is an instrument part: an ink face with a hairline, a top bevel and a 2px wall underneath that
+   it sinks onto when pressed. Keys that carry a temperature (the hot primary, the cold primary, the wide wallet key) add
+   the site's own reading: the kelvin ramp along the bottom, dim at rest with only the needle lit where the key reads;
+   touching it lights the ramp up to the needle and moves the needle (hot keys warm up, cold keys cool down). Cold runs
+   left and hot runs right on every key, like the tuner ruler. Disabled keys read "not yet" (dashed, no reading) and a key
+   that waits on the chain marches instead of reading, so progress and temperature never look alike. */
+
+@property --rd-pos { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --rd-fill { syntax: '<number>'; inherits: true; initial-value: 0; }
+
+/* ---------------------------------------------------------------- the face every key shares */
+.kv-key, .kv-wallet, .kv-tuner-menu, .privacy-button, .kv-ag-send, .kv-icon, .kv-copy {
+  --face-1: #1b1824; --face-2: #110f17;
+  --hair: rgba(239, 233, 225, .2); --hair-on: rgba(239, 233, 225, .44);
+  --bevel: rgba(239, 233, 225, .075); --wall: #000;
+  --ink-label: var(--kv-paper); --ink-icon: var(--kv-mute);
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--hair);
+  border-radius: var(--kv-r);
+  background: linear-gradient(180deg, var(--face-1), var(--face-2));
+  color: var(--ink-label);
+  box-shadow: inset 0 1px 0 var(--bevel), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 2px 0 var(--wall);
+  transition: border-color 160ms var(--kv-ease-ui), color 160ms var(--kv-ease-ui), background-color 160ms var(--kv-ease-ui), transform 70ms var(--kv-ease-ui), box-shadow 70ms var(--kv-ease-ui), --rd-pos 180ms var(--kv-ease-ui), --rd-fill 180ms var(--kv-ease-ui);
+}
+.kv-key:hover:not(:disabled), .kv-wallet:hover:not(:disabled), .kv-tuner-menu:hover, .privacy-button:hover:not(:disabled),
+.kv-ag-send:hover:not(:disabled), .kv-icon:hover:not(:disabled), .kv-copy:hover { border-color: var(--hair-on); }
+/* the press: the face sinks one pixel onto its wall */
+.kv-key:active:not(:disabled), .kv-wallet:active:not(:disabled), .kv-tuner-menu:active, .privacy-button:active:not(:disabled),
+.kv-ag-send:active:not(:disabled), .kv-icon:active:not(:disabled), .kv-copy:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 var(--bevel), inset 0 -1px 0 rgba(0, 0, 0, .45), 0 1px 0 var(--wall);
+}
+.kv-key:focus-visible, .kv-wallet:focus-visible, .kv-tuner-menu:focus-visible, .kv-ag-send:focus-visible, .kv-icon:focus-visible, .kv-copy:focus-visible { outline: 2px solid var(--kv-hot); outline-offset: 3px; }
+.privacy-button:focus-visible, .kv-key.cold:focus-visible { outline: 2px solid var(--kv-ice); outline-offset: 3px; }
+
+/* ---------------------------------------------------------------- the main key */
+.kv-key {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 22px;
+  min-height: 52px; padding: 0 18px 0 20px;
+  font: 600 13px/1 var(--kv-mono); font-stretch: 87.5%; letter-spacing: .005em; white-space: nowrap;
+}
+.kv-key > span { display: flex; align-items: center; }
+.kv-key > svg { flex: none; width: 17px; height: 17px; color: var(--ink-icon); transition: transform 160ms var(--kv-ease-ui), color 160ms var(--kv-ease-ui); }
+.kv-key:hover:not(:disabled) > svg.lucide-arrow-up-right { transform: translate(2px, -2px); }
+
+/* secondary: plain ink, no reading */
+.kv-key.ink:hover:not(:disabled) { background: linear-gradient(180deg, #221e2d, #15131c); }
+.kv-key.ink:hover:not(:disabled) > svg { color: var(--kv-paper); }
+
+/* ---------------------------------------------------------------- keys that carry a temperature */
+.kv-key:not(.ink), .privacy-button:not(.secondary), .kv-buy .kv-wallet {
+  --rd-in: 16px; --rd-bot: 8px; --rd-th: 3px; --rd-nh: 13px;
+  --rd-ramp: var(--kv-ramp);
+  --rd-dim: rgba(9, 8, 13, .5);
+  --rd-glow: 255, 104, 46;
+  --rd-needle: #fff3e6;
+  --rd-tick: rgba(239, 233, 225, .42);
+  --rd-x: calc(var(--rd-in) + (100% - 2 * var(--rd-in)) * var(--rd-pos));
+}
+/* the track: the ramp, dimmed beyond what is lit; lit from the cold end up to the needle when touched */
+.kv-key:not(.ink)::after, .privacy-button:not(.secondary)::after, .kv-buy .kv-wallet::after {
+  content: ''; position: absolute; z-index: -1; pointer-events: none;
+  left: var(--rd-in); right: var(--rd-in); bottom: var(--rd-bot); height: calc(var(--rd-th) + 6px);
+  background:
+    repeating-linear-gradient(90deg, var(--rd-tick) 0 1px, transparent 1px calc((100% - 1px) / 4)) left top / 100% 4px no-repeat,
+    linear-gradient(90deg, transparent calc(var(--rd-fill) * 100%), var(--rd-dim) 0) left bottom / 100% var(--rd-th) no-repeat,
+    var(--rd-ramp) left bottom / 100% var(--rd-th) no-repeat;
+  border-radius: 1px;
+}
+/* the needle: lit at the key's reading, always */
+.kv-key:not(.ink)::before, .privacy-button:not(.secondary)::before, .kv-buy .kv-wallet::before {
+  content: ''; position: absolute; z-index: 1; pointer-events: none;
+  left: calc(var(--rd-x) - 1px); bottom: calc(var(--rd-bot) - (var(--rd-nh) - var(--rd-th)) / 2);
+  width: 2px; height: var(--rd-nh); border-radius: 1px;
+  background: var(--rd-needle); box-shadow: 0 0 9px 1px rgba(var(--rd-glow), .85);
+  transition: transform 70ms var(--kv-ease-ui);
+}
+.kv-key:not(.ink):active:not(:disabled)::before, .privacy-button:not(.secondary):active:not(:disabled)::before { transform: scaleY(1.35); }
+
+/* hot: a warm face, the needle reads warm and runs to the top of the ramp when touched */
+.kv-key:not(.ink):not(.cold), .kv-buy .kv-wallet {
+  --rd-pos: .72; --rd-fill: 0;
+  --face-1: #2f1710; --face-2: #1d0f0b;
+  --hair: rgba(255, 126, 66, .5); --hair-on: rgba(255, 150, 96, .85);
+  --bevel: rgba(255, 178, 130, .2); --wall: #4a1a0b;
+  --ink-label: #fff4ea; --ink-icon: var(--kv-hot-hi);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+}
+.kv-key:not(.ink):not(.cold):hover:not(:disabled), .kv-key:not(.ink):not(.cold):focus-visible,
+.kv-buy .kv-wallet:hover:not(:disabled), .kv-buy .kv-wallet:focus-visible {
+  --rd-pos: 1; --rd-fill: 1;
+  background: linear-gradient(180deg, #3a1c12, #230f0a);
+}
+.kv-key:not(.ink):not(.cold):hover:not(:disabled) > svg { color: #ffd7b8; }
+
+/* cold: a navy face, the needle reads cool and falls toward the cold end when touched; cold stays on the left */
+.kv-key.cold, .privacy-button:not(.secondary) {
+  --rd-pos: .3; --rd-fill: 0;
+  --rd-glow: 120, 186, 255; --rd-needle: #f0f8ff;
+  --rd-dim: rgba(6, 10, 22, .52); --rd-tick: rgba(169, 211, 255, .42);
+  --face-1: #182640; --face-2: #0e1729;
+  --hair: rgba(169, 211, 255, .42); --hair-on: rgba(200, 228, 255, .85);
+  --bevel: rgba(200, 228, 255, .14); --wall: #0a2147;
+  --ink-label: #f3f8ff; --ink-icon: var(--kv-ice);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .45);
+}
+.kv-key.cold:hover:not(:disabled), .kv-key.cold:focus-visible,
+.privacy-button:not(.secondary):hover:not(:disabled), .privacy-button:not(.secondary):focus-visible {
+  --rd-pos: .07; --rd-fill: .07;
+  background: linear-gradient(180deg, #1d2e4d, #101b31);
+}
+.kv-key.cold:hover:not(:disabled) > svg { color: #ffffff; }
+
+/* disabled: not yet. A dashed edge (the site's TBA mark), no reading, no wall */
+.kv-key:disabled:not(:has(.kv-spin)), .privacy-button:disabled, .kv-ag-send:disabled, .kv-wallet:disabled {
+  --face-1: #13111a; --face-2: #100e15;
+  border: 1px dashed rgba(239, 233, 225, .22);
+  color: var(--kv-dim); text-shadow: none;
+  box-shadow: none; cursor: not-allowed;
+}
+.kv-key:disabled:not(:has(.kv-spin))::before, .kv-key:disabled:not(:has(.kv-spin))::after,
+.privacy-button:disabled::before, .privacy-button:disabled::after, .kv-buy .kv-wallet:disabled::before, .kv-buy .kv-wallet:disabled::after { display: none; }
+.kv-key:disabled > svg, .privacy-button:disabled > svg, .kv-wallet:disabled > svg { color: var(--kv-dim); }
+.privacy-button:disabled { border-color: rgba(169, 211, 255, .2); }
+.kv-wallet:disabled { cursor: progress; }
+
+/* waiting on the chain: the track marches and the needle leaves, so it never reads as a temperature */
+@keyframes kv-march { to { background-position: 18px 0, 0 0; } }
+.kv-key:disabled:has(.kv-spin) {
+  --face-1: #1b1824; --face-2: #110f17;
+  border: 1px solid rgba(255, 126, 66, .4); color: var(--kv-paper-2); cursor: progress;
+}
+.kv-key:disabled:has(.kv-spin)::before { display: none; }
+.kv-key:disabled:has(.kv-spin)::after {
+  content: ''; position: absolute; z-index: -1; left: 16px; right: 16px; bottom: 8px; height: 3px;
+  background: repeating-linear-gradient(90deg, rgba(255, 139, 61, .85) 0 8px, transparent 8px 18px) 0 0 / auto 100%, rgba(255, 255, 255, .05);
+  animation: kv-march .7s linear infinite;
+}
+.kv-spin { animation: kv-spin 1.1s linear infinite; }
+@keyframes kv-spin { to { transform: rotate(360deg); } }
+
+/* full-width keys: the label centres on the whole face, the icon rides the right edge */
+.kv-key.kv-go, .kv-key.kv-ln-go { width: 100%; }
+.kv-key.kv-go > span, .kv-key.kv-ln-go > span { flex: 1; justify-content: center; padding-left: 39px; }
+
+/* ---------------------------------------------------------------- the wallet key */
+.kv-wallet {
+  --rd-pos: .72;
+  display: flex; align-items: center; gap: 9px;
+  height: 38px; padding: 0 12px 0 14px;
+  font: 600 12px/1 var(--kv-mono); font-stretch: 87.5%; white-space: nowrap;
+}
+.kv-wallet > svg { order: 2; flex: none; color: var(--ink-icon); transition: color 160ms var(--kv-ease-ui); }
+/* the tuner's wallet is a compact warm key; on the cold side it cools with the page */
+.kv-tuner .kv-wallet:not(.on) {
+  --face-1: #2f1710; --face-2: #1d0f0b;
+  --hair: rgba(255, 126, 66, .5); --hair-on: rgba(255, 150, 96, .85);
+  --bevel: rgba(255, 178, 130, .2); --wall: #4a1a0b;
+  --ink-label: #fff4ea; --ink-icon: var(--kv-hot-hi);
+}
+.kv-tuner .kv-wallet:not(.on):hover:not(:disabled) { background: linear-gradient(180deg, #3a1c12, #230f0a); }
+body:has(.kv-cold) .kv-tuner .kv-wallet:not(.on) {
+  --face-1: #182640; --face-2: #0e1729;
+  --hair: rgba(169, 211, 255, .42); --hair-on: rgba(200, 228, 255, .85);
+  --bevel: rgba(200, 228, 255, .14); --wall: #0a2147;
+  --ink-label: #f3f8ff; --ink-icon: var(--kv-ice);
+}
+body:has(.kv-cold) .kv-tuner .kv-wallet:not(.on):hover:not(:disabled) { background: linear-gradient(180deg, #1d2e4d, #101b31); }
+/* connected: plain ink with a live mark */
+.kv-wallet.on { --ink-icon: var(--kv-up); }
+.kv-wallet.on:hover { background: linear-gradient(180deg, #221e2d, #15131c); }
+/* the wallet key standing in for the buy key on a token page carries the reading */
+.kv-buy .kv-wallet { height: 52px; padding: 0 18px 0 20px; justify-content: space-between; font-size: 13px; }
+
+.kv-tuner-menu { color: var(--kv-paper); }
+.kv-tuner-menu[aria-expanded='true'] { border-color: var(--hair-on); background: linear-gradient(180deg, #221e2d, #15131c); }
+
+/* ---------------------------------------------------------------- cold side keys */
+.privacy-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 20px;
+  font: 600 12.5px/1 var(--kv-mono); font-stretch: 87.5%; white-space: nowrap;
+}
+.privacy-button > svg { flex: none; color: var(--ink-icon); }
+.privacy-button:not(.secondary) { --rd-bot: 6px; --rd-nh: 10px; }
+.privacy-button.secondary { --face-1: #141b2b; --face-2: #0c111d; --hair: rgba(169, 211, 255, .22); --hair-on: rgba(169, 211, 255, .5); --bevel: rgba(169, 211, 255, .07); --ink-icon: var(--kv-mute); }
+.privacy-button.secondary:hover:not(:disabled) { background: linear-gradient(180deg, #19223a, #0f1524); }
+.privacy-button.secondary:hover:not(:disabled) > svg { color: var(--kv-ice); }
+
+/* ---------------------------------------------------------------- the agent's send key */
+.kv-ag-send {
+  --face-1: #2f1710; --face-2: #1d0f0b; --hair: rgba(255, 126, 66, .5); --hair-on: rgba(255, 150, 96, .85);
+  --bevel: rgba(255, 178, 130, .2); --wall: #4a1a0b; --ink-label: var(--kv-hot-hi);
+  display: grid; place-items: center; width: 50px; height: 50px; padding: 0;
+}
+.kv-ag-send:hover:not(:disabled) { background: linear-gradient(180deg, #3a1c12, #230f0a); color: #ffd7b8; }
+.kv-ag-send.stop { --face-1: #1b1824; --face-2: #110f17; --hair: rgba(255, 126, 66, .45); --wall: #000; --ink-label: var(--kv-paper); }
+.kv-ag-send:disabled { color: var(--kv-dim); }
+
+/* ---------------------------------------------------------------- small controls */
+/* the selected item carries a short lit segment of the ramp ending in a needle, like a reading in miniature */
+.kv-seg { padding: 3px; gap: 2px; border: 1px solid var(--kv-line); border-radius: var(--kv-r); background: var(--kv-void); }
+.kv-seg button, .kv-chips button, .kv-ln-chips button, .privacy-tabs button {
+  --seg: linear-gradient(90deg, #a99bd8, #e8371f 55%, #ff8b3d); --tip: #fff3e6; --tipglow: rgba(255, 104, 46, .8);
+  position: relative;
+  font: 500 12px/1 var(--kv-mono); font-stretch: 87.5%;
+  color: var(--kv-mute);
+  transition: color 160ms var(--kv-ease-ui), background-color 160ms var(--kv-ease-ui), border-color 160ms var(--kv-ease-ui);
+}
+.kv-seg button { height: 32px; padding: 0 14px; border-radius: 4px; background: transparent; }
+.kv-seg.small button { height: 28px; padding: 0 10px; font-size: 11px; }
+.kv-seg button:hover:not([aria-selected='true']) { color: var(--kv-paper); background-color: rgba(239, 233, 225, .045); }
+.kv-chips button, .kv-ln-chips button {
+  height: 32px; padding: 0 12px; border: 1px solid var(--kv-line-2); border-radius: 4px;
+  font-size: 11px; color: var(--kv-paper-2);
+  background: linear-gradient(180deg, #17151f, #100f16); box-shadow: inset 0 1px 0 rgba(239, 233, 225, .05), 0 1px 0 #000;
+}
+.kv-chips button { height: 30px; padding: 0 10px; }
+.kv-chips.small button { height: 24px; padding: 0 8px; }
+.kv-chips button:hover:not([aria-pressed='true']), .kv-ln-chips button:hover:not([aria-pressed='true']) { border-color: rgba(239, 233, 225, .44); color: var(--kv-paper); }
+.privacy-tabs button { height: 38px; border-radius: 4px; background: transparent; }
+.privacy-tabs button:hover:not([aria-pressed='true']):not(:disabled) { color: var(--kv-paper); background-color: rgba(169, 211, 255, .05); }
+.kv-seg button[aria-selected='true'], .kv-chips button[aria-pressed='true'], .kv-ln-chips button[aria-pressed='true'], .privacy-tabs button[aria-pressed='true'] {
+  color: var(--kv-paper);
+  border-color: rgba(239, 233, 225, .3);
+  background: linear-gradient(180deg, #221e2d, #16141e);
+  box-shadow: inset 0 0 0 1px rgba(239, 233, 225, .1), inset 0 1px 0 rgba(239, 233, 225, .07);
+}
+.kv-seg button[aria-selected='true']::after, .kv-chips button[aria-pressed='true']::after, .kv-ln-chips button[aria-pressed='true']::after, .privacy-tabs button[aria-pressed='true']::after {
+  content: ''; position: absolute; left: 50%; bottom: 2px; width: 22px; height: 5px; transform: translateX(-50%); pointer-events: none;
+  background: linear-gradient(var(--tip), var(--tip)) right bottom / 2px 5px no-repeat, var(--seg) left bottom / calc(100% - 2px) 2px no-repeat;
+  filter: drop-shadow(0 0 3px var(--tipglow));
+}
+.kv-chips.small button[aria-pressed='true']::after { bottom: 1px; width: 16px; height: 4px; background-size: 2px 4px, calc(100% - 2px) 2px; }
+.privacy-tabs button[aria-pressed='true'] { --seg: linear-gradient(90deg, #10215f, #2e8fff 55%, #a9d3ff); --tip: #f0f8ff; --tipglow: rgba(120, 186, 255, .85); background: linear-gradient(180deg, #172238, #0e1628); border-color: rgba(169, 211, 255, .3); }
+
+/* icon and copy keys: the ink family at small sizes */
+.kv-icon { display: grid; place-items: center; width: 32px; height: 32px; color: var(--kv-paper-2); }
+.kv-icon:disabled { opacity: .4; cursor: not-allowed; }
+.kv-copy { display: inline-flex; align-items: center; justify-content: space-between; gap: 10px; height: 36px; padding: 0 12px; font-size: 12px; color: var(--kv-paper-2); }
+.kv-copy > svg { color: var(--kv-mute); }
+.kv-copy:hover > svg { color: var(--kv-hot-hi); }
+
+/* the agent's suggestions: rows on the ink, the hairline warms and a short reading appears when touched */
+.kv-ag-suggest button {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--kv-s3);
+  min-height: 46px; padding: 10px 14px; border: 1px solid var(--kv-line); border-radius: var(--kv-r);
+  text-align: left; font-size: 12px; line-height: 1.5; color: var(--kv-paper-2); background: transparent;
+  transition: border-color 160ms var(--kv-ease-ui), color 160ms var(--kv-ease-ui), background-color 160ms var(--kv-ease-ui);
+}
+.kv-ag-suggest button:hover, .kv-ag-suggest button:focus-visible { border-color: rgba(255, 126, 66, .5); background-color: var(--kv-ink); color: var(--kv-paper); }
+.kv-ag-suggest svg { flex: none; color: var(--kv-hot); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kv-key, .kv-wallet, .privacy-button, .kv-ag-send { transition-duration: 1ms; }
+  .kv-key:disabled:has(.kv-spin)::after, .kv-spin { animation: none; }
+}

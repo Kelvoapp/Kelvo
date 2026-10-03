@@ -1,0 +1,100 @@
+/* Home: the bloom stands on a pinned stage; the first view sets the lettering behind it, small copy top left,
+   the thermometer on the right edge and the running temperatures along the bottom. */
+.kv-home { position: relative; }
+.kv-stage { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+.kv-bloom-canvas { display: block; width: 100%; height: 100%; pointer-events: auto; }
+.kv-stage-fallback { display: none; position: absolute; left: 53%; top: 44%; width: min(40vh, 34vw); transform: translate(-50%, -50%); border-radius: 50%; }
+.kv-bloom-canvas[data-failed] { display: none; }
+.kv-bloom-canvas[data-failed] + .kv-stage-fallback { display: block; }
+
+.kv-first { position: relative; min-height: 100svh; overflow: hidden; }
+.kv-word { position: absolute; z-index: 0; left: 50%; bottom: 58px; transform: translateX(-50%); font: 300 var(--kv-fs-hero)/.78 var(--kv-display); font-variation-settings: 'SOFT' 100, 'WONK' 0, 'opsz' 144; letter-spacing: -.055em; color: var(--kv-paper); white-space: nowrap; user-select: none; pointer-events: none; }
+
+.kv-hero-copy { position: relative; z-index: 2; display: grid; gap: var(--kv-s5); justify-items: start; max-width: 500px; padding: 116px 0 0 var(--kv-gutter); pointer-events: none; }
+.kv-hero-copy > * { pointer-events: auto; }
+.kv-hero-copy h1 { font-size: clamp(36px, 3.9vw, 58px); line-height: 1.0; }
+.kv-hero-copy h1 em { display: block; }
+.kv-lede { max-width: 42ch; color: var(--kv-mute); font-size: var(--kv-fs-body); line-height: 1.7; }
+.kv-keys { display: flex; flex-wrap: wrap; gap: var(--kv-s4); }
+.kv-id { font: 500 var(--kv-fs-small)/1 var(--kv-mono); color: var(--kv-paper-2); letter-spacing: .02em; }
+.kv-id span { color: var(--kv-dim); margin: 0 4px; }
+
+/* the thermometer */
+.kv-thermo { position: absolute; z-index: 2; right: var(--kv-gutter); top: 118px; bottom: 210px; width: 190px; }
+.kv-thermo-bar { position: absolute; left: 58px; top: 0; bottom: 0; width: 6px; border-radius: 3px; background: var(--kv-ramp-v); box-shadow: 0 0 22px rgba(255, 90, 31, .22), 0 0 22px rgba(46, 143, 255, .14); }
+.kv-thermo-tick { position: absolute; left: 0; width: 48px; transform: translateY(50%); text-align: right; font: 400 10px/1 var(--kv-mono); color: var(--kv-dim); font-variant-numeric: tabular-nums; }
+.kv-thermo-mark { position: absolute; left: 52px; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; height: 18px; font: 500 11px/1 var(--kv-mono); color: var(--kv-mute); white-space: nowrap; transition: color var(--kv-fast) var(--kv-ease-ui); }
+.kv-thermo-mark i { position: relative; width: 18px; height: 2px; border-radius: 1px; background: var(--c); box-shadow: 0 0 8px var(--c); }
+.kv-thermo-mark i::before { content: ''; position: absolute; left: 0; top: 1px; width: 1px; height: var(--lead); background: var(--c); opacity: .45; transform: scaleY(var(--dir)); transform-origin: top; }
+.kv-thermo-mark b { font-weight: 600; color: var(--kv-paper-2); }
+.kv-thermo-mark span { color: var(--c); }
+.kv-thermo-mark:hover, .kv-thermo-mark.on { color: var(--kv-paper); }
+.kv-thermo-mark.on b { color: var(--kv-paper); }
+.kv-thermo-mark.on i { width: 26px; }
+
+/* the spot meter that follows the pointer over a petal */
+.kv-spot { position: fixed; left: 0; top: 0; z-index: var(--kv-z-spot); pointer-events: none; opacity: 0; transition: opacity var(--kv-fast) var(--kv-ease-ui); }
+.kv-spot[data-on='1'] { opacity: 1; }
+.kv-spot-x, .kv-spot-y { position: absolute; background: var(--kv-paper); opacity: .8; }
+.kv-spot-x { left: -20px; top: 0; width: 40px; height: 1px; }
+.kv-spot-y { left: 0; top: -20px; width: 1px; height: 40px; }
+.kv-spot-read { position: absolute; left: 22px; top: 22px; display: grid; gap: 6px; min-width: 250px; padding: 12px 14px; border: 1px solid var(--kv-line-2); border-radius: var(--kv-r); background: var(--kv-ink); box-shadow: 3px 4px 0 #000; }
+.kv-spot-read b { font: 600 16px/1.1 var(--kv-mono); color: var(--kv-paper); }
+.kv-spot-read b em { font-style: normal; margin-left: 6px; }
+.kv-spot-read small { font-size: 11px; color: var(--kv-mute); line-height: 1.5; }
+
+/* the running temperatures */
+.kv-tape { position: absolute; z-index: 2; left: 0; right: 0; bottom: 12px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.kv-tape-run { display: flex; width: max-content; animation: kv-run 90s linear infinite; }
+.kv-tape-dup { display: flex; }
+.kv-tape:hover .kv-tape-run { animation-play-state: paused; }
+@keyframes kv-run { to { transform: translateX(-50%); } }
+.kv-tape-cell { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 18px; font: 500 12px/1 var(--kv-mono); white-space: nowrap; }
+.kv-tape-cell b { font-weight: 600; color: var(--kv-paper); }
+.kv-tape-cell i { font-style: normal; font-variant-numeric: tabular-nums; }
+.kv-tape-cell em { font-style: normal; font-size: 11px; color: var(--kv-dim); }
+.kv-tape-cell em.up { color: var(--kv-up); }
+.kv-tape-cell em.down { color: var(--kv-down); }
+.kv-coin { flex: none; border-radius: 50%; object-fit: cover; background: var(--kv-ink-3); }
+.kv-coin.mono { display: grid; place-items: center; font: 600 8px/1 var(--kv-mono); color: var(--kv-mute); }
+.kv-feed-note { position: absolute; z-index: 2; left: var(--kv-gutter); bottom: 56px; font-size: 12px; color: var(--kv-down); }
+
+@media (max-width: 1100px) { .kv-thermo { display: none; } }
+@media (max-width: 760px) {
+  .kv-hero-copy { padding: calc(52svh) var(--kv-gutter) 0; gap: var(--kv-s4); max-width: none; }
+  .kv-hero-copy h1 { font-size: 34px; }
+  .kv-hero-copy h1 em { display: inline; }
+  .kv-lede { font-size: 12px; }
+  .kv-keys { gap: 12px; }
+  .kv-word { bottom: 52px; font-size: 25vw; }
+  .kv-first { min-height: 100svh; padding-bottom: 150px; }
+}
+@media (prefers-reduced-motion: reduce) { .kv-tape-run { animation: none; } }
+
+/* the chapters: copy over the pinned stage, a different placement each time */
+.kv-ch { position: relative; z-index: 2; min-height: 135svh; display: flex; align-items: center; padding: 0 var(--kv-gutter); pointer-events: none; }
+.kv-ch-copy { display: grid; gap: var(--kv-s5); justify-items: start; max-width: 470px; pointer-events: auto; }
+.kv-ch h2 { font-size: clamp(36px, 3.9vw, 58px); line-height: 1.02; }
+.kv-ch p { color: var(--kv-mute); line-height: 1.75; }
+.kv-formula { margin: 0; padding: var(--kv-s4) var(--kv-s5) var(--kv-s4) var(--kv-s4); border-left: 2px solid var(--kv-hot); border-radius: 0 var(--kv-r) var(--kv-r) 0; background: var(--kv-ink); color: var(--kv-paper); font: 400 12px/1.7 var(--kv-mono); font-stretch: 87.5%; white-space: pre; overflow-x: auto; max-width: 100%; }
+.kv-small { font-size: 11.5px !important; color: var(--kv-dim) !important; }
+.kv-facts { display: grid; width: 100%; }
+.kv-facts li { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: var(--kv-s4); padding: 11px 0; border-top: 1px solid var(--kv-line); font-size: 12px; }
+.kv-facts li:last-child { border-bottom: 1px solid var(--kv-line); }
+.kv-facts b { font-weight: 600; color: var(--kv-paper); }
+.kv-facts span { color: var(--kv-mute); overflow-wrap: anywhere; }
+
+/* the cold layer that rises with the cold chapter, and the ladder's labels */
+.kv-frost { position: fixed; inset: 0; z-index: 0; opacity: 0; pointer-events: none; background: radial-gradient(ellipse 60% 55% at 70% 46%, rgba(46, 143, 255, .17), transparent 72%), linear-gradient(180deg, rgba(169, 211, 255, .07), rgba(12, 22, 52, .55)); }
+.kv-ladder { position: fixed; inset: 0; z-index: 2; opacity: 0; pointer-events: none; }
+.kv-ladder span { position: absolute; left: calc(var(--x) + var(--w) * (.25 + .75 * var(--len)) + 14px); top: calc(var(--y) + var(--h) / 9 * (var(--k) + .5)); transform: translateY(-50%); display: flex; align-items: baseline; gap: 10px; font: 500 12px/1 var(--kv-mono); white-space: nowrap; }
+.kv-ladder b { color: var(--kv-paper); font-weight: 600; }
+.kv-ladder em { font-style: normal; color: var(--c); font-variant-numeric: tabular-nums; }
+.kv-ladder small { font-size: 10.5px; color: var(--kv-dim); }
+
+@media (max-width: 760px) {
+  .kv-ch { min-height: 125svh; align-items: flex-start; padding-top: 60svh; }
+  .kv-ch h2 { font-size: 32px; }
+  .kv-facts li { grid-template-columns: 96px minmax(0, 1fr); }
+  .kv-ladder small { display: none; }
+}
