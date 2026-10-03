@@ -4,6 +4,7 @@ import { HOLDER_MIN_USD, IDENTITY } from '../../identity.js';
 import { fmtK, heat01, rampColor } from '../../heat-client.js';
 import { clock, useReading } from './data.js';
 import { Lamp } from './ui.jsx';
+import ContractTag from '../../chrome/ContractTag.jsx';
 
 /** A two-way switch drawn in its position. Not a control: the position follows the contract and the holder bar. */
 const Switch = ({ gated }) => <span className="kf-switch" data-pos={gated ? 'holders' : 'open'} role="img" aria-label={gated ? 'Set to holders only' : 'Set to open with limits'}>
@@ -68,7 +69,7 @@ export default function KelvoBoard() {
       <section className="kf-ca" aria-label="Contract">
         <div className="kf-ca-slot">
           <span className="kv-label">Contract</span>
-          <div className={'kf-ca-plate' + (ca ? ' set' : '')}>{ca ? <b className="kv-num">{ca}</b> : <><i aria-hidden="true">0x</i><span aria-hidden="true" /><b>TBA</b></>}</div>
+          <div className={'kf-ca-plate' + (ca ? ' set' : '')}>{ca ? <ContractTag address={ca} /> : <><i aria-hidden="true">0x</i><span aria-hidden="true" /><b>TBA</b></>}</div>
           <small>Published here, on the {IDENTITY.ticker} page and in the docs at the same moment. Robinhood Chain.</small>
         </div>
         <div className="kf-ca-gauge" aria-label={ca && k != null ? `${IDENTITY.ticker} reads ${fmtK(k)}` : `${IDENTITY.ticker} has no reading yet`}>

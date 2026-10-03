@@ -94,9 +94,10 @@ export function EndSplit({ heat }) {
   </div>;
 }
 
-const ROUTES = [['/heat', 'Heat', 'Every token in kelvin'], ['/launch', 'Launch', 'Starts cold at 0 K'], ['/agent', 'Agent', 'Read only, never signs'], ['/cold', 'Cold', 'The private pools'], ['/kelvo', IDENTITY.ticker, 'Contract TBA'], ['/docs', 'Docs', 'Rules, contracts, limits']];
+const ROUTES = [['/heat', 'Heat', 'Every token in kelvin'], ['/launch', 'Launch', 'Starts cold at 0 K'], ['/agent', 'Agent', 'Read only, never signs'], ['/cold', 'Cold', 'The private pools'], ['/kelvo', IDENTITY.ticker, IDENTITY.contract ? 'Contract live' : 'Contract TBA'], ['/docs', 'Docs', 'Rules, contracts, limits']];
 const DOCS = [['heat', 'The heat rule'], ['token', 'Token pages and buys'], ['launch', 'Launch'], ['agent', 'Agent'], ['cold', 'Cold side'], ['keys', 'Keys and recovery'], ['kelvo', IDENTITY.ticker], ['status', 'Status and sources']];
 const LOG = [
+  ['2026-10-03', 'Oct 3, 2026', 'The $KELVO contract is published on the home page, the $KELVO page and the docs; it trades on the Pons curve paired with ETH.'],
   ['2026-10-02', 'Oct 2, 2026', 'Launch on the Pons curve paired with ETH, the agent persona written into the token on chain.'],
   ['2026-10-02', 'Oct 2, 2026', 'First build: the bloom, the heat rule, the heat board, token pages, the agent, the cold side with the trail ΔT, the docs.'],
 ];

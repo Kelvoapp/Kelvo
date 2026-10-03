@@ -17,7 +17,9 @@
 .kv-lede { max-width: 42ch; color: var(--kv-mute); font-size: var(--kv-fs-body); line-height: 1.7; }
 .kv-keys { display: flex; flex-wrap: wrap; gap: var(--kv-s4); }
 .kv-id { font: 500 var(--kv-fs-small)/1 var(--kv-mono); color: var(--kv-paper-2); letter-spacing: .02em; }
-.kv-id span { color: var(--kv-dim); margin: 0 4px; }
+.kv-id { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.kv-id > span { color: var(--kv-dim); margin: 0 4px; }
+.kv-id .kv-ca-tag { height: 34px; font-size: 12px; }
 
 /* the thermometer */
 .kv-thermo { position: absolute; z-index: 2; right: var(--kv-gutter); top: 118px; bottom: 210px; width: 190px; }

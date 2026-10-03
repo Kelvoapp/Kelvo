@@ -426,3 +426,6 @@ a.kf-pick:hover { border-color: var(--kv-hot); }
 .kf-foot-status li { display: inline-flex; align-items: center; gap: 8px; }
 .kf-foot-status b { font-weight: 600; color: var(--kv-paper-2); }
 @media (max-width: 560px) { .kf-cam-hud .tr { display: none; } }
+.kf-ca-plate.set { height: auto; min-height: 46px; padding: 0; }
+.kf-ca-plate.set .kv-ca-tag { flex: 1; height: auto; min-height: 46px; border: 0; background: transparent; box-shadow: none; font-size: 13px; color: var(--kv-paper); }
+.kf-ca-plate.set span { flex: none; border-top: 0; }

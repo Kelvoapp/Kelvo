@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Snowflake } from 'lucide-react';
+import ContractTag from '../chrome/ContractTag.jsx';
 import Bloom from '../bloom/Bloom';
 import { IDENTITY } from '../identity';
 import { bloomPick, fmtK, fmtPct, fmtUsd, heat01, rampColor, useHeat } from '../heat-client';
@@ -164,7 +165,7 @@ export default function Home() {
           <Link className="kv-key" to="/heat"><span>Read the heat</span><ArrowUpRight /></Link>
           <Link className="kv-key ink" to="/cold"><span>Go cold</span><Snowflake /></Link>
         </div>
-        <p className="kv-id">{IDENTITY.ticker} <span>·</span> {IDENTITY.contract ? IDENTITY.contract : 'contract TBA'}</p>
+        <div className="kv-id">{IDENTITY.ticker} <span>·</span> {IDENTITY.contract ? <ContractTag address={IDENTITY.contract} /> : 'contract TBA'}</div>
       </div>
       {top.length > 0 && <Thermo tokens={top} hover={hover} onHover={(i) => { forced.current = i; drive.current = { ...drive.current, focus: i }; }} />}
       <div ref={spot} className="kv-spot" aria-hidden="true">

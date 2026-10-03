@@ -89,7 +89,7 @@ export default function Docs() {
 
         <section id="kelvo">
           <h2>{IDENTITY.ticker}</h2>
-          <p>Contract: <b>{IDENTITY.contract || 'TBA'}</b>. It is published here, on the home page and on the {IDENTITY.ticker} page at the same moment. Holder bar, creator fees, launch details and socials are TBA. {gated ? `The agent and the cold side open for holders of $${HOLDER_MIN_USD}.` : 'The agent and the cold side switch to holders only by themselves once the contract and the holder bar are set; until then they are open with limits.'}</p>
+          <p>Contract: {IDENTITY.contract ? <a className="kv-doc-ca-inline" href={EXPLORER + '/token/' + IDENTITY.contract} target="_blank" rel="noreferrer">{IDENTITY.contract}</a> : <b>TBA</b>}. It is published here, on the home page and on the {IDENTITY.ticker} page at the same moment. {IDENTITY.contract ? 'It launched on the Pons curve paired with ETH. Holder bar, creator fees and socials are TBA.' : 'Holder bar, creator fees, launch details and socials are TBA.'} {gated ? `The agent and the cold side open for holders of $${HOLDER_MIN_USD}.` : 'The agent and the cold side switch to holders only by themselves once ' + (IDENTITY.contract ? 'the holder bar is set' : 'the contract and the holder bar are set') + '; until then they are open with limits.'}</p>
           <Link className="kv-doc-link" to="/kelvo">The {IDENTITY.ticker} page<ArrowUpRight size={14} /></Link>
         </section>
 
@@ -100,6 +100,8 @@ export default function Docs() {
 
         <section id="changelog">
           <h2>Changelog</h2>
+          <h3>October 3, 2026</h3>
+          <p>The {IDENTITY.ticker} contract is published here, on the home page and on the {IDENTITY.ticker} page. It trades on the Pons curve paired with ETH. Same day: reading keys, the instrument chapters on the home page, and the market desk with the on-chain swap tape.</p>
           <h3>October 2, 2026</h3>
           <p>First build: the bloom drawn from the logo as a live shader whose petals are real tokens, the heat rule, the heat board, token pages with buys, the agent, the cold side with the trail ΔT, the launch, the {IDENTITY.ticker} page and these docs.</p>
         </section>

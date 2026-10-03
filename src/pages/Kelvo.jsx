@@ -4,6 +4,7 @@ import { ArrowUpRight, ShieldAlert } from 'lucide-react';
 import { HOLDER_MIN_USD, IDENTITY } from '../identity';
 import { EXPLORER } from '../wallet';
 import { fmtK, heat01, rampColor } from '../heat-client';
+import ContractTag from '../chrome/ContractTag.jsx';
 import './pages.css';
 
 // $KELVO: what it is, what it opens, and every fact that does not exist yet written as TBA. The reading appears on its own
@@ -23,13 +24,13 @@ export default function Kelvo() {
   const ca = IDENTITY.contract, coin = useReading(ca), k = coin?.kelvin ?? null;
   const gated = Boolean(ca && HOLDER_MIN_USD);
   const fill = (ca && k != null ? Math.max(0.02, heat01(k)) : 0) * 100 + '%';
-  const opens = gated ? `holders of $${HOLDER_MIN_USD} of ${IDENTITY.ticker}` : 'any signed-in wallet, with a daily limit, until the contract and the holder bar are set';
+  const opens = gated ? `holders of $${HOLDER_MIN_USD} of ${IDENTITY.ticker}` : (ca ? 'any signed-in wallet, with a daily limit, until the holder bar is set' : 'any signed-in wallet, with a daily limit, until the contract and the holder bar are set');
   const rows = [
     ['Ticker', IDENTITY.ticker],
     ['Network', 'Robinhood Chain'],
     ['Contract', ca ? <a href={EXPLORER + '/token/' + ca} target="_blank" rel="noreferrer">{ca}<ArrowUpRight size={13} /></a> : 'TBA'],
     ['Temperature', ca ? fmtK(k) : 'Reads once it trades, by the same rule as every token'],
-    ['Launch', 'TBA'],
+    ['Launch', ca ? 'Pons curve, paired with ETH' : 'TBA'],
     ['Holder bar', gated ? `$${HOLDER_MIN_USD}` : 'TBA'],
     ['Agent', 'Open to ' + opens],
     ['Cold side', 'Open to ' + opens],
@@ -48,8 +49,8 @@ export default function Kelvo() {
       <div className="kv-kelvo-copy">
         <span className="kv-label">Robinhood Chain</span>
         <h1 id="kv-kelvo-title" className="kv-kelvo-ticker">{IDENTITY.ticker}</h1>
-        <p className="kv-kelvo-lede">The key to the <em>cold side</em>. Holding it is planned to open the agent and the private pools once its contract is live. Until then both are open to any wallet, with limits.</p>
-        <div className="kv-kelvo-ca"><span className="kv-label">Contract</span><b>{ca || 'TBA'}</b><small>Published here, on the home page and in the docs at the same moment.</small></div>
+        <p className="kv-kelvo-lede">The key to the <em>cold side</em>. Holding it is planned to open the agent and the private pools once the holder bar is set. Until then both are open to any signed-in wallet, with limits.</p>
+        <div className="kv-kelvo-ca"><span className="kv-label">Contract</span>{ca ? <ContractTag address={ca} /> : <b>TBA</b>}<small>Published here, on the home page and in the docs at the same moment.</small></div>
         <div className="kv-keys">
           {ca ? <Link className="kv-key" to={'/token/' + ca}><span>Buy {IDENTITY.ticker}</span><ArrowUpRight /></Link> : <Link className="kv-key" to="/heat"><span>Read the heat</span><ArrowUpRight /></Link>}
           <Link className="kv-key ink" to="/docs#kelvo"><span>Read the docs</span><ArrowUpRight /></Link>

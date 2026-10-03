@@ -12,7 +12,7 @@ Kelvo is a web app for Robinhood Chain. It reads every token on the board every 
 
 The same reading drives the rest of the app: a market desk, token pages with a buy, an agent that reads but never transacts, a launch flow on the Pons curve, and a cold side where the goal is the opposite, to read 0 K and blend into a private pool.
 
-**Status: prelaunch.** $KELVO has no contract yet. The contract address will be posted from the official accounts and shown on the site at the same moment. Anything trading as Kelvo before that is not this project.
+**$KELVO contract:** [`0x911fc0efa2219152e42faa8282697edbd4d28830`](https://robinhoodchain.blockscout.com/token/0x911fc0efa2219152e42faa8282697edbd4d28830) on Robinhood Chain, launched on the Pons curve paired with ETH. The same address is on the home page, the $KELVO page and the docs. Anything else trading as Kelvo is not this project.
 
 ## Pages
 
@@ -24,7 +24,7 @@ The same reading drives the rest of the app: a market desk, token pages with a b
 | `/agent` | Chat over read-only tools: the board, a token report, a buy quote, a wallet's holdings, the private pools and a withdrawal check |
 | `/cold` | Private ETH and USDG pools with the trail check before a withdrawal |
 | `/launch` | Launch a token on the Pons V2 curve paired with ETH, with an agent persona written into its description on chain |
-| `/kelvo`, `/docs` | The token page for $KELVO (empty until the contract exists) and the documentation |
+| `/kelvo`, `/docs` | The $KELVO page (contract, launch venue, what holding it opens) and the documentation |
 
 ## The heat rule
 

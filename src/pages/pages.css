@@ -74,3 +74,5 @@
   .kv-docs-index a { padding: 8px 10px; border: 1px solid var(--kv-line); border-radius: 4px; }
   .kv-doc-ca { grid-template-columns: minmax(0, 1fr); gap: 4px; }
 }
+.kv-doc-ca-inline { color: var(--kv-paper); overflow-wrap: anywhere; word-break: break-all; }
+.kv-kelvo-ca .kv-ca-tag { width: 100%; height: auto; min-height: 46px; font-size: 15px; color: var(--kv-paper); }

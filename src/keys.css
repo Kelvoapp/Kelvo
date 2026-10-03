@@ -256,3 +256,13 @@ body:has(.kv-cold) .kv-tuner .kv-wallet:not(.on):hover:not(:disabled) { backgrou
   .kv-key, .kv-wallet, .privacy-button, .kv-ag-send { transition-duration: 1ms; }
   .kv-key:disabled:has(.kv-spin)::after, .kv-spin { animation: none; }
 }
+
+/* the contract as a copy key: full address on wide screens, short on phones */
+.kv-ca-tag { max-width: 100%; min-width: 0; text-transform: none; }
+.kv-ca-tag .kv-ca-full { overflow-wrap: anywhere; text-align: left; }
+.kv-ca-tag .kv-ca-short, .kv-ca-tag.compact .kv-ca-full { display: none; }
+.kv-ca-tag.compact .kv-ca-short { display: inline; }
+@media (max-width: 720px) {
+  .kv-ca-tag .kv-ca-full { display: none; }
+  .kv-ca-tag .kv-ca-short { display: inline; }
+}
