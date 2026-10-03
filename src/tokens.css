@@ -1,0 +1,55 @@
+/* Kelvo tokens. Sampled from the logo: a black ground, petals with a hot orange core and a cold blue rim, lilac between.
+   Hot and cold are the two semantic accents (public motion and private quiet); everything else is ink, paper and lilac grey. */
+:root {
+  --kv-void: #050508;
+  --kv-ink: #0c0b12;
+  --kv-ink-2: #14121c;
+  --kv-ink-3: #1d1a28;
+  --kv-paper: #efe9e1;
+  --kv-paper-2: #d9d2cb;
+  --kv-mute: #a49db6;
+  --kv-dim: #6f6983;
+  --kv-line: rgba(239, 233, 225, .12);
+  --kv-line-2: rgba(239, 233, 225, .22);
+
+  --kv-hot: #ff5a1f;
+  --kv-hot-hi: #ff8b3d;
+  --kv-red: #e8371f;
+  --kv-cold: #2e8fff;
+  --kv-ice: #a9d3ff;
+  --kv-lilac: #a99bd8;
+  --kv-up: #5fe0a2;
+  --kv-down: #ff9b8a;
+
+  /* the thermal ramp, cold to hot, used for every temperature in the interface */
+  --kv-ramp: linear-gradient(90deg, #0f1f63 0%, #2e8fff 18%, #a99bd8 42%, #e8371f 66%, #ff5a1f 82%, #ffd27a 100%);
+  --kv-ramp-v: linear-gradient(0deg, #0f1f63 0%, #2e8fff 18%, #a99bd8 42%, #e8371f 66%, #ff5a1f 82%, #ffd27a 100%);
+
+  --kv-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --kv-mono: 'Martian Mono Variable', 'Martian Mono', ui-monospace, 'Cascadia Mono', monospace;
+
+  --kv-fs-hero: clamp(112px, 23vw, 352px);
+  --kv-fs-1: clamp(38px, 4.4vw, 66px);
+  --kv-fs-2: clamp(26px, 2.4vw, 38px);
+  --kv-fs-3: 20px;
+  --kv-fs-body: 13px;
+  --kv-fs-small: 12px;
+  --kv-fs-label: 11px;
+
+  --kv-s1: 4px; --kv-s2: 8px; --kv-s3: 12px; --kv-s4: 16px; --kv-s5: 24px; --kv-s6: 32px; --kv-s7: 48px; --kv-s8: 64px; --kv-s9: 96px; --kv-s10: 144px;
+  --kv-gutter: clamp(16px, 3vw, 44px);
+
+  --kv-r: 6px;
+  --kv-r-2: 8px;
+  --kv-bw: 2px;
+
+  --kv-ease: cubic-bezier(.22, 1, .36, 1);
+  --kv-ease-ui: cubic-bezier(.4, 0, .2, 1);
+  --kv-fast: 160ms;
+  --kv-slow: 900ms;
+
+  --kv-z-stage: 0;
+  --kv-z-copy: 2;
+  --kv-z-tuner: 40;
+  --kv-z-spot: 60;
+}

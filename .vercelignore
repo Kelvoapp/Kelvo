@@ -1,0 +1,7 @@
+artifacts/
+dist/
+node_modules/
+*.log
+.env*
+test-results/
+marketing/
