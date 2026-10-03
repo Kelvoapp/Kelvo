@@ -95,13 +95,14 @@ export default function Docs() {
 
         <section id="status">
           <h2>Status and sources</h2>
+          {IDENTITY.repo && <p>Source code: <a className="kv-doc-ca-inline" href={IDENTITY.repo} target="_blank" rel="noreferrer">github.com/Kelvoapp/Kelvo</a>. Every push runs the tests and a build on Node 22 and 24.</p>}
           <p>Kelvo is unaudited. The guards on amounts, approvals, recipients, relay payloads and launch calls are covered by tests; browser checks run with stand-in wallets and no funds. No funded deposit, withdrawal or launch is claimed here. Trades, volume and liquidity come from public pool feeds; balances, quotes, launches and the private pools are read on chain. Kelvo is not affiliated with Robinhood or endorsed by the protocols it integrates.</p>
         </section>
 
         <section id="changelog">
           <h2>Changelog</h2>
           <h3>October 3, 2026</h3>
-          <p>The {IDENTITY.ticker} contract is published here, on the home page and on the {IDENTITY.ticker} page. It trades on the Pons curve paired with ETH. Same day: reading keys, the instrument chapters on the home page, and the market desk with the on-chain swap tape.</p>
+          <p>The {IDENTITY.ticker} contract is published here, on the home page and on the {IDENTITY.ticker} page. It trades on the Pons curve paired with ETH. The source is public on GitHub. Same day: reading keys, the instrument chapters on the home page, and the market desk with the on-chain swap tape.</p>
           <h3>October 2, 2026</h3>
           <p>First build: the bloom drawn from the logo as a live shader whose petals are real tokens, the heat rule, the heat board, token pages with buys, the agent, the cold side with the trail ΔT, the launch, the {IDENTITY.ticker} page and these docs.</p>
         </section>

@@ -429,3 +429,4 @@ a.kf-pick:hover { border-color: var(--kv-hot); }
 .kf-ca-plate.set { height: auto; min-height: 46px; padding: 0; }
 .kf-ca-plate.set .kv-ca-tag { flex: 1; height: auto; min-height: 46px; border: 0; background: transparent; box-shadow: none; font-size: 13px; color: var(--kv-paper); }
 .kf-ca-plate.set span { flex: none; border-top: 0; }
+.kf-foot-id .kv-ca-tag { height: 28px; padding: 0 8px; font-size: 11px; justify-self: start; }

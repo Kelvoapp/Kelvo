@@ -5,6 +5,7 @@ import { HOLDER_MIN_USD, IDENTITY } from '../../identity.js';
 import { EXPLORER } from '../../wallet.js';
 import { fmtK, fmtUsd, rampColor } from '../../heat-client.js';
 import { block, clock, clockS, medianK, useReading, useTape } from './data.js';
+import ContractTag from '../../chrome/ContractTag.jsx';
 import { Coin, Lamp } from './ui.jsx';
 
 /** Every token on the board as a tick on the kelvin scale, the median as a needle, the hottest named at its tick. */
@@ -97,6 +98,7 @@ export function EndSplit({ heat }) {
 const ROUTES = [['/heat', 'Heat', 'Every token in kelvin'], ['/launch', 'Launch', 'Starts cold at 0 K'], ['/agent', 'Agent', 'Read only, never signs'], ['/cold', 'Cold', 'The private pools'], ['/kelvo', IDENTITY.ticker, IDENTITY.contract ? 'Contract live' : 'Contract TBA'], ['/docs', 'Docs', 'Rules, contracts, limits']];
 const DOCS = [['heat', 'The heat rule'], ['token', 'Token pages and buys'], ['launch', 'Launch'], ['agent', 'Agent'], ['cold', 'Cold side'], ['keys', 'Keys and recovery'], ['kelvo', IDENTITY.ticker], ['status', 'Status and sources']];
 const LOG = [
+  ['2026-10-03', 'Oct 3, 2026', 'The source is public on GitHub, checked on Node 22 and 24 on every push. Kelvo answers at kelvo.lat.'],
   ['2026-10-03', 'Oct 3, 2026', 'The $KELVO contract is published on the home page, the $KELVO page and the docs; it trades on the Pons curve paired with ETH.'],
   ['2026-10-02', 'Oct 2, 2026', 'Launch on the Pons curve paired with ETH, the agent persona written into the token on chain.'],
   ['2026-10-02', 'Oct 2, 2026', 'First build: the bloom, the heat rule, the heat board, token pages, the agent, the cold side with the trail ΔT, the docs.'],
@@ -137,11 +139,11 @@ export function Footer({ heat }) {
       <div className="kf-foot-col">
         <span className="kv-label">{IDENTITY.ticker}</span>
         <dl className="kf-foot-id">
-          <div><dt>Contract</dt><dd className={IDENTITY.contract ? '' : 'tba'}>{tba(IDENTITY.contract)}</dd></div>
+          <div><dt>Contract</dt><dd className={IDENTITY.contract ? '' : 'tba'}>{IDENTITY.contract ? <ContractTag address={IDENTITY.contract} compact /> : 'TBA'}</dd></div>
           <div><dt>Holder bar</dt><dd className={HOLDER_MIN_USD ? '' : 'tba'}>{HOLDER_MIN_USD ? '$' + HOLDER_MIN_USD : 'TBA'}</dd></div>
           <div><dt>X</dt><dd className={IDENTITY.x ? '' : 'tba'}>{tba(IDENTITY.x)}</dd></div>
           <div><dt>Telegram</dt><dd className={IDENTITY.telegram ? '' : 'tba'}>{tba(IDENTITY.telegram)}</dd></div>
-          <div><dt>Source</dt><dd className={IDENTITY.repo ? '' : 'tba'}>{tba(IDENTITY.repo)}</dd></div>
+          <div><dt>Source</dt><dd className={IDENTITY.repo ? '' : 'tba'}>{IDENTITY.repo ? <a href={IDENTITY.repo} target="_blank" rel="noreferrer">GitHub<ArrowUpRight size={12} /></a> : 'TBA'}</dd></div>
           <div><dt>Network</dt><dd><a href={EXPLORER} target="_blank" rel="noreferrer">Robinhood Chain<ArrowUpRight size={12} /></a></dd></div>
         </dl>
       </div>

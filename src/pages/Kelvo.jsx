@@ -37,7 +37,7 @@ export default function Kelvo() {
     ['Creator fees', 'Where they go is TBA and will be posted on the docs page'],
     ['X', IDENTITY.x || 'TBA'],
     ['Telegram', IDENTITY.telegram || 'TBA'],
-    ['Source', IDENTITY.repo || 'TBA'],
+    ['Source', IDENTITY.repo ? <a href={IDENTITY.repo} target="_blank" rel="noreferrer">github.com/Kelvoapp/Kelvo<ArrowUpRight size={13} /></a> : 'TBA'],
   ];
   return <main className="kv-page kv-kelvo">
     <section className="kv-kelvo-hero" aria-labelledby="kv-kelvo-title">

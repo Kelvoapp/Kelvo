@@ -4,6 +4,8 @@
 
 <p align="center">Every token on Robinhood Chain read as a temperature in kelvin, from how it trades on chain.</p>
 
+<p align="center"><a href="https://kelvo.lat">kelvo.lat</a></p>
+
 <p align="center"><a href="https://github.com/Kelvoapp/Kelvo/actions/workflows/ci.yml"><img src="https://github.com/Kelvoapp/Kelvo/actions/workflows/ci.yml/badge.svg" alt="Checks"></a></p>
 
 ---
